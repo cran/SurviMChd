@@ -4,22 +4,22 @@
 \alias{fraidm}
 \title{Frailty with Discrete Mixture  Model}
 \usage{
-fraidm(m, n, Inst, Delta, Time, T.min, chains, iter, data)
+fraidm(m, n, Ins, Del, Time, T.min, chn, iter, data)
 }
 \arguments{
 \item{m}{Starting column number form where study variables to be selected.}
 
 \item{n}{Ending column number till where study variables will get selected.}
 
-\item{Inst}{Variable name of Institute information.}
+\item{Ins}{Variable name of Institute information.}
 
-\item{Delta}{Variable name containing the event information.}
+\item{Del}{Variable name containing the event information.}
 
 \item{Time}{Variable name containing the time information.}
 
 \item{T.min}{Variable name containing the time of event information.}
 
-\item{chains}{Number of MCMC chains}
+\item{chn}{Number of MCMC chains}
 
 \item{iter}{Define number of iterations as number.}
 
@@ -39,9 +39,6 @@ omega[1] and omega[2] are frailty effects.
 
 
 c[1] and c[2] are regression intercept and coefficients of covariates over mean effect.
-
-
-deviance is the model diagnostic criteria.
 }
 \description{
 Discrete mixture model with MCMC
@@ -53,7 +50,7 @@ By given m and n, a total of 3 variables can be selected.
 \dontrun{
 ##
 data(frailty)
-fraidm(5,7,Inst="institute",Delta="del",Time="timevar",T.min="time.min",2,7,frailty)
+fraidm(m=5,n=7,Ins="institute",Del="del",Time="timevar",T.min="time.min",chn=2,iter=6,data=frailty)
 ##
 }
 }

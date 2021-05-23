@@ -4,33 +4,32 @@
 \alias{fraidpm}
 \title{Frailty with drichlet process mixture}
 \usage{
-fraidpm(m, n, Inst, Delta, Time, T.min, chains, iter, data)
+fraidpm(m, n, Ins, Del, Time, T.min, chn, iter, adapt, data)
 }
 \arguments{
 \item{m}{Starting column number form where study variables to be selected.}
 
 \item{n}{Ending column number till where study variables will get selected.}
 
-\item{Inst}{Variable name of Institute information.}
+\item{Ins}{Variable name of Institute information.}
 
-\item{Delta}{Variable name containing the event information.}
+\item{Del}{Variable name containing the event information.}
 
 \item{Time}{Variable name containing the time information.}
 
 \item{T.min}{Variable name containing the time of event information.}
 
-\item{chains}{Number of MCMC chains.}
+\item{chn}{Number of MCMC chains.}
 
 \item{iter}{Define number of iterations as number.}
+
+\item{adapt}{Define number of adaptations as number.}
 
 \item{data}{High dimensional data, event information given as (delta=0 if alive, delta=1 if died). If patient is censored then t.min=duration of survival. If patient is died then t.min=0. If patient is died then t=duration of survival. If patient is alive then t=NA.}
 }
 \value{
 fraidpmout
 omeg[i] are frailty effects.
-
-
-deviance is the model diagnostic criteria.
 }
 \description{
 Frailty analysis on high dimensional data by Drichlet process mixture.
@@ -42,7 +41,8 @@ By given m and n, a total of 3 variables can be selected.
 \dontrun{
 ##
 data(frailty)
-fraidpm(5,7,Inst="institute",Delta="del",Time="timevar",T.min="time.min",2,6,frailty)
+fraidpm(m=5,n=7,Ins="institute",Del="del",Time="timevar",T.min="time.min",chn=2,iter=6,
+adapt=100,data=frailty)
 ##
 }
 }

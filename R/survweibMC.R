@@ -11,7 +11,7 @@
 #' @param data High dimensional data having survival duration as (OS), event information as Death (1 if died, or 0 if alive).
 
 #' @return beta1[1] Posterior estimates of regression coefficients and deviance
-#' @import R2OpenBUGS
+#' @import R2jags
 #' @import dplyr
 #'
 #' @author Atanu Bhattacharjee and Akash Pawar
@@ -19,7 +19,7 @@
 #' \dontrun{
 #' ##
 #' data(headnneck)
-#' survweibMC(8,12,4,7,2,10,headnneck)
+#' survweibMC(m1=8,n1=12,m2=4,n2=7,chains=2,iter=10,data=headnneck)
 #' ##
 #' }
 #' @seealso survexpMC
@@ -29,7 +29,7 @@
 #' @references Khan, S. A. (2018). Exponentiated Weibull regression for time-to-event
 #'  data. \emph{Lifetime data analysis}, \bold{24(2)}, 328-354.
 #' @export
-survweibMC<-function(m1,n1,m2,n2,chains,iter,data){
+survweibMC <- function(m1,n1,m2,n2,chains,iter,data){
 
   p=m1;q=n1;r=m2;s=n2;
   vr <- c(r:s)
@@ -65,19 +65,13 @@ survweibMC<-function(m1,n1,m2,n2,chains,iter,data){
           t=c(0,2,seq(6,(6*(M-2)),6)),
           Y=y1,
           surt=surt,
-          surt.cen=surt.cen,
+          #surt.cen=surt.cen,
           randgrp1=randgrp1,
           gender1=gender1,
           stratum1=stratum1,
           prevoi1=prevoi1)
 
-
-  inits<-function(){list(beta1=c(rep(0,6)),tauz=1,
-                         beta2=c(rep(0,M)),r1=0,r2=0,
-                         sigmab1=1,sigmab2=1,cor=0,
-                         U=matrix(rep(0,(nrow(data)*2)),nrow(data),2))}
-
-  weibullbugs<-function(){
+  fw <- function(){
     for (i in 1:N) {
       for (j in 1:M) {
         Y[i, j] ~ dnorm(muy[i, j], tauz)
@@ -131,20 +125,17 @@ survweibMC<-function(m1,n1,m2,n2,chains,iter,data){
     r1~dnorm(0, 0.01)
     r2~dnorm(0, 0.01)
   }
+  #-------------------------------------------------------------------------------
+  # initial values
+  inits<-function(){list(beta1=c(rep(0,6)),tauz=1,
+                         beta2=c(rep(0,M)),r1=0,r2=0,
+                         U=matrix(rep(0,(nrow(data)*2)),nrow(data),2))}
+  params1 <- c("beta1")
 
-  ## some temporary file name:
-  modelfw <- file.path(tempdir(), "weibullbugs.txt")
-  ## write model file:
-  write.model(weibullbugs, modelfw)
-  params1 = c("beta1")
-  v100.sim <- bugs(a, inits, model.file = modelfw,
-                   parameters.to.save = params1, n.chains =2,
-                   n.iter =200,n.burnin =100)
-  survweibMCout <- list()
-  result <- v100.sim$summary
-  survweibMCout[["Posteror estimates"]]<-result
-  survweibMCout[["Dic"]]<-v100.sim$DIC
-  return(survweibMCout)
+  #### Set up the JAGS model and settings
+  jags.m <- jags(a, inits, model.file = fw, parameters.to.save = params1,
+                 n.iter = iter, n.chains=chains, n.burnin = iter/2 )
+
+  return(jags.m)
 }
-utils::globalVariables(c("N","beta1","U","Y","yp1","beta2","r1","r2","surP","tauZ","inverse","tau"))
-
+utils::globalVariables(c("beta1","U","yp1","Y","log<-","beta2","r1","r2","surP","tauz","inverse","tau"))

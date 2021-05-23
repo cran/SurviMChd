@@ -7,10 +7,10 @@
 #' \item{OS}{Overall Survival}
 #' \item{Death}{Death status}
 #' \item{t}{Time at which event occurred}
-#' \item{Covariate_1}{Variable measured on continuous scale}
-#' \item{Covariate_2}{Variable measured on discrete scale}
-#' \item{Covariate_3}{Variable measured on continuous scale}
-#' \item{Covariate_4}{Variable measured on discrete scale}
-#' \item{Covariate_5}{Variable measured on continuous scale}}
+#' \item{x1}{Variable measured on continuous scale}
+#' \item{x2}{Variable measured on discrete scale}
+#' \item{x3}{Variable measured on continuous scale}
+#' \item{x4}{Variable measured on discrete scale}
+#' \item{x5}{Variable measured on continuous scale}}
 #' @examples data(mcsurv)
 "mcsurv"

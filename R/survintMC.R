@@ -25,7 +25,7 @@
 #' \dontrun{
 #' ##
 #' data(hnscc)
-#' survintMC(7,11,Leftcensor="leftcensoring",OS="os",Death="death",6,hnscc)
+#' survintMC(m=7,n=11,Leftcensor="leftcensoring",OS="os",Death="death",iter=6,data=hnscc)
 #' ##
 #' }
 #' @seealso survMC
@@ -33,7 +33,7 @@
 #'  with interval-censored data: A practical approach with examples in R, SAS,
 #'  and BUGS. CRC Press.
 #' @export
-survintMC <- function(m,n,Leftcensor,OS,Death,iter,data){
+survintMC <- function(m,n,Leftcensor=NULL,OS,Death,iter,data){
 
   data1 <- data
   data2 <- data
@@ -42,20 +42,29 @@ survintMC <- function(m,n,Leftcensor,OS,Death,iter,data){
   hrci <- matrix(ncol = 2)
   variables <- matrix(ncol = 1)
   burn=(iter/2)
+  lf<-data1[,Leftcensor]
+  if(length(Leftcensor)==0)
+    {
+    lftcen<-c(rep(0,nrow(data)))
+    }
+  if(length(Leftcensor)==1)
+    {
+    lftcen<-lf
+    }
   for(i in m:n){
     breastICB <- ICBayes(model = "case2ph",
-                         L = data1[,Leftcensor], R = data1[,OS], status = data1[,Death],
+                         L = lftcen, R = data1[,OS], status = data1[,Death],
                          xcov = data2[, i], x_user = c(0, 1),
                          knots = seq(0.1, 60.1, length = 4),
                          grids = seq(0.1, 60.1, by = 1),
                          niter = iter, burnin = (iter/2)
     )
     ngrid <- length(breastICB$S0_m)
-    plot(breastICB$grids, breastICB$S_m[1:ngrid], type = "l",
-         lty = "solid", xlab = "Survival times (months)", main = names(data1)[i],
-         ylab = "Estimated survival distributions", ylim = c(0, 1))
-    lines(breastICB$grids, breastICB$S_m[(ngrid+1):(2*ngrid)],
-          lty = "dashed")
+    #plot(breastICB$grids, breastICB$S_m[1:ngrid], type = "l",
+        # lty = "solid", xlab = "Survival times (months)", main = names(data1)[i],
+        # ylab = "Estimated survival distributions", ylim = c(0, 1))
+    #lines(breastICB$grids, breastICB$S_m[(ngrid+1):(2*ngrid)],
+       #   lty = "dashed")
     HR <- exp(breastICB$coef)
     HR.CI <- exp(breastICB$coef_ci)
 

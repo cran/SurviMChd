@@ -4,7 +4,7 @@
 \alias{survintMC}
 \title{High dimensional survival analysis with interval censored data by MCMC}
 \usage{
-survintMC(m, n, Leftcensor, OS, Death, iter, data)
+survintMC(m, n, Leftcensor = NULL, OS, Death, iter, data)
 }
 \arguments{
 \item{m}{Starting column number from where variables of high dimensional data will get selected.}
@@ -37,7 +37,7 @@ Death The column containing the death and alive information, must be names as 'S
 \dontrun{
 ##
 data(hnscc)
-survintMC(7,11,Leftcensor="leftcensoring",OS="os",Death="death",6,hnscc)
+survintMC(m=7,n=11,Leftcensor="leftcensoring",OS="os",Death="death",iter=6,data=hnscc)
 ##
 }
 }

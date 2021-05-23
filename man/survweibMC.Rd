@@ -31,7 +31,7 @@ Survival analysis with weibull distribution by MCMC
 \dontrun{
 ##
 data(headnneck)
-survweibMC(8,12,4,7,2,10,headnneck)
+survweibMC(m1=8,n1=12,m2=4,n2=7,chains=2,iter=10,data=headnneck)
 ##
 }
 }

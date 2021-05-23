@@ -1,11 +1,11 @@
 Title: High Dimensional Survival Data Analysis with Markov Chain Monte
         Carlo
 Package: SurviMChd
-Version: 0.1.0
-Date: 2021-03-22
+Version: 0.1.1
+Date: 2021-05-23
 Depends: R (>= 3.5.0)
-Imports: survival, utils, Rdpack (>= 0.7), readr,
-        R2OpenBUGS,tidyverse,icenReg,ICBayes,dplyr,rlang
+Imports: survival, utils, Rdpack (>= 0.7), readr, rjags,
+        R2jags,tidyverse,icenReg,ICBayes,dplyr,rlang
 LazyData: Yes
 LazyDataCompression: xz
 ByteCompile: Yes
@@ -21,8 +21,8 @@ Encoding: UTF-8
 NeedsCompilation: no
 Maintainer: Atanu Bhattacharjee <atanustat@gmail.com>
 RoxygenNote: 7.1.1.9000
-Packaged: 2021-03-22 15:49:46 UTC; pawar
+Packaged: 2021-05-23 14:05:27 UTC; atanu
 Author: Atanu Bhattacharjee [aut, cre, ctb],
   Akash Pawar [aut, ctb]
 Repository: CRAN
-Date/Publication: 2021-03-23 08:50:02 UTC
+Date/Publication: 2021-05-23 14:20:02 UTC

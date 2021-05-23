@@ -1,20 +1,22 @@
-#' Survival analysis using Cox Proportional Hazards with MCMC.
+#' Survival analysis on multiple variables with MCMC
 #'
-#' @description Performs survival analysis using Cox Proportional Hazards with MCMC.
+#' @description Performs survival analysis using Cox Proportional Hazards with MCMC with an option to input select multiple variables.
 #' @details The survival columns of the data should be arranged as follows -
 #' Death Death status=1 if died otherwise 0.
 #' OS Survival duration measured as 'OS'
-#' t.len Number of censored times
 #'
-#' @param m Starting column number from where variables of high dimensional data will get selected.
-#' @param n Ending column number till where variables of high dimensional data will get selected.
+#' @param var1 Variable name (first one)
+#' @param var2 Variable name (second one)
+#' @param var3 Variable name (third one)
+#' @param var4 Variable name (fourth one)
+#' @param var5 Variable name (fifth one)
 #' @param Time Variable/Column name containing the information on duration of survival
 #' @param Event Variable/Column name containing the information of survival event
 #' @param chains Number of chains to perform
-#' @param adapt Number of adaptations to perform
+#' @param adapt Number of chains to perform
 #' @param iter Number of iterations to perform
 #' @param data High dimensional data having survival duration and event.
-#' @return Data set containing Posterior HR estimates, SD and quantiles.
+#' @return Data set containing Posterior HR estimates, SD, quantiles and meandeviance.
 #' @import rjags
 #'
 #' @author Atanu Bhattacharjee and Akash Pawar
@@ -22,20 +24,56 @@
 #' \dontrun{
 #' ##
 #' data(mcsurv)
-#' survMC(m=4,n=8,Time="OS",Event="Death",chains=2,adapt=100,iter=1000,data=mcsurv)
+#' survMCmulti(var1="x1",var2=NULL,var3="x3",var4="x2",
+#'    var5="x4",Time="OS",Event="Death",chains=2,adapt=100,iter=1000,data=mcsurv)
 #' ##
 #' }
 #' @seealso survintMC
 #' @references Bhattacharjee, A. (2020). Bayesian Approaches in Oncology Using R
 #' and OpenBUGS. CRC Press.
 #' @export
-survMC <- function(m,n,Time,Event,chains,adapt,iter,data)
+survMCmulti <- function(var1=NULL,var2=NULL,var3=NULL,var4=NULL,
+                             var5=NULL,Time,Event,chains,adapt,iter,data)
 {
   if(Time!="OS"){
     names(data)[names(data) == Time] <- "OS"
   }
   if(Event!="Death"){
     names(data)[names(data) == Event] <- "Death"
+  }
+
+  multi <- c(var1,var2,var3,var4,var5)
+
+
+  if(length(multi)==5){
+    x1=data[,multi[1]]
+    x2=data[,multi[2]]
+    x3=data[,multi[3]]
+    x4=data[,multi[4]]
+    x5=data[,multi[5]]
+    x = t(rbind(x1,x2,x3,x4,x5))
+    p=5
+  }
+  if(length(multi)==4){
+    x1=data[,multi[1]]
+    x2=data[,multi[2]]
+    x3=data[,multi[3]]
+    x4=data[,multi[4]]
+    x = t(rbind(x1,x2,x3,x4))
+    p=4
+  }
+  if(length(multi)==3){
+    x1=data[,multi[1]]
+    x2=data[,multi[2]]
+    x3=data[,multi[3]]
+    x = t(rbind(x1,x2,x3))
+    p=3
+  }
+  if(length(multi)==2){
+    x1=data[,multi[1]]
+    x2=data[,multi[2]]
+    x = t(rbind(x1,x2))
+    p=2
   }
 
 
@@ -56,6 +94,8 @@ survMC <- function(m,n,Time,Event,chains,adapt,iter,data)
   u2 <- sort(u1)
   t.len<-(length(u2)-1)
 
+
+  datafi <- list(x=x,obs.t=data$OS,t=u2,T=t.len,N=nrow(data),fail=data$Death,eps=1E-10,p=p)
 
 
   model_jags <- "
@@ -99,40 +139,26 @@ survMC <- function(m,n,Time,Event,chains,adapt,iter,data)
 
   inits <-  function(){list( beta = rep(0,p), dL0 = rep(0.0001,bigt))}
 
-  x2 <- rep(0,nrow(data))
-
-  q <- matrix(nrow=0,ncol=5)
-  s <- matrix(nrow=0,ncol=2)
-  di <- matrix(nrow=0,ncol=1)
-  for(i in m:n){
-    x1 <- data[(1:nrow(data)),i]
-    x = t(rbind(x1,x2))
-
-    datafi <- list(x=x,obs.t=data$OS,t=u2,T=t.len,N=nrow(data),fail=data$Death,eps=1E-10,p=2)
-
-    jags <- jags.model(textConnection(model_jags),
-                       data = datafi,
-                       n.chains = chains,
-                       n.adapt = adapt)
+  jags <- jags.model(textConnection(model_jags),
+                     data = datafi,
+                     n.chains = chains,
+                     n.adapt = adapt)
 
 
-    samps <- coda.samples(jags, params, n.iter=iter)
-    s1 <- summary(samps)
-    stats <- s1$statistics[1,c(1:2)]
-    s <- rbind(s,stats)
-    quan <- s1$quantiles[1,]
-    q <- rbind(q,quan)
-    d = dic.samples(jags, n.iter=iter)
-    meandeviance <- round(sum(d$deviance),2)
-    di <- rbind(di,meandeviance)
-  }
-  results <- cbind(s,q)
+  samps <- coda.samples(jags, params, n.iter=iter)
+  s1 <- summary(samps)
+  quan <- s1$quantiles[c(1:p),]
+  stats <- s1$statistics[c(1:p),c(1:2)]
+  results <- data.frame(stats,quan)
   expresults <- exp(results)
-
-  Variables <- names(data)[m:n]
-  expresults <- data.frame(Variables,expresults,di)
-  colnames(expresults)<-c("Variable","Posterior Means","SD","2.5%","25%","50%","75%","97.5%","DIC")
+  names(expresults)<-c("Posterior Means","SD","2.5%","25%","50%","75%","97.5%")
+  Variables <- multi
+  expresults <- cbind(Variables,expresults)
   rownames(expresults) <- NULL
-  return(expresults)
+
+  d= dic.samples(jags, n.iter=iter)
+  meandeviance <- round(sum(d$deviance),2)
+  output <- list( 'Posterior Estimates' = expresults, 'DIC' = meandeviance)
+  return(output)
 }
-utils::globalVariables(c("Death","N","step","obs.t","eps","fail","x1","dL0","p","bigt"))
+utils::globalVariables(c("Death","N","step","obs.t","eps","fail","x1","x2","x3","x4","x5","dL0","bigt"))

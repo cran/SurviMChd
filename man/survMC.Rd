@@ -4,21 +4,27 @@
 \alias{survMC}
 \title{Survival analysis using Cox Proportional Hazards with MCMC.}
 \usage{
-survMC(m, n, chains, iter, data)
+survMC(m, n, Time, Event, chains, adapt, iter, data)
 }
 \arguments{
 \item{m}{Starting column number from where variables of high dimensional data will get selected.}
 
 \item{n}{Ending column number till where variables of high dimensional data will get selected.}
 
-\item{chains}{Number of chains to be considered}
+\item{Time}{Variable/Column name containing the information on duration of survival}
 
-\item{iter}{Number of iterations to be applied}
+\item{Event}{Variable/Column name containing the information of survival event}
+
+\item{chains}{Number of chains to perform}
+
+\item{adapt}{Number of adaptations to perform}
+
+\item{iter}{Number of iterations to perform}
 
 \item{data}{High dimensional data having survival duration and event.}
 }
 \value{
-survMCout Data set containing Posterior HR estimates and deviance values
+Data set containing Posterior HR estimates, SD and quantiles.
 }
 \description{
 Performs survival analysis using Cox Proportional Hazards with MCMC.
@@ -33,7 +39,7 @@ t.len Number of censored times
 \dontrun{
 ##
 data(mcsurv)
-survMC(4,8,2,10,mcsurv)
+survMC(m=4,n=8,Time="OS",Event="Death",chains=2,adapt=100,iter=1000,data=mcsurv)
 ##
 }
 }

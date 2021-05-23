@@ -4,33 +4,32 @@
 \alias{frairand}
 \title{Frailty with random effects in high dimensional data with MCMC}
 \usage{
-frairand(m, n, Inst, Delta, Time, T.min, chains, iter, data)
+frairand(m, n, Ins, Del, Time, T.min, chn, iter, adapt, data)
 }
 \arguments{
 \item{m}{Starting column number form where study variables to be selected.}
 
 \item{n}{Ending column number till where study variables will get selected.}
 
-\item{Inst}{Variable name of Institute information.}
+\item{Ins}{Variable name of Institute information.}
 
-\item{Delta}{Variable name containing the event information.}
+\item{Del}{Variable name containing the event information.}
 
 \item{Time}{Variable name containing the time information.}
 
 \item{T.min}{Variable name containing the time of event information.}
 
-\item{chains}{Numner of MCMC chains.}
+\item{chn}{Numner of MCMC chains.}
 
 \item{iter}{Define number of iterations as number.}
+
+\item{adapt}{Define number of adaptations as number.}
 
 \item{data}{High dimensional data having survival duration, event information and column of time for death cases.}
 }
 \value{
 frairandout
 omeg[i] are frailty effects.
-
-
-deviance is the model diagnostic criteria.
 }
 \description{
 Random effects frailty model
@@ -42,7 +41,8 @@ By given m and n, a total of 3 variables can be selected.
 \dontrun{
 ##
 data(frailty)
-frairand(5,7,Inst="institute",Delta="del",Time="timevar",T.min="time.min",2,6,frailty)
+frairand(m=5,n=7,Ins="institute",Del="del",Time="timevar",T.min="time.min",chn=2,iter=6,
+ adapt=100,data=frailty)
 ##
 }
 }
