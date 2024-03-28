@@ -1,11 +1,10 @@
 Title: High Dimensional Survival Data Analysis with Markov Chain Monte
         Carlo
 Package: SurviMChd
-Version: 0.1.1
-Date: 2021-05-23
+Version: 0.1.2
+Date: 2024-03-26
 Depends: R (>= 3.5.0)
-Imports: survival, utils, Rdpack (>= 0.7), readr, rjags,
-        R2jags,tidyverse,icenReg,ICBayes,dplyr,rlang
+Imports: rjags,R2jags,dplyr
 LazyData: Yes
 LazyDataCompression: xz
 ByteCompile: Yes
@@ -14,15 +13,15 @@ Authors@R: c(person(("Atanu"), "Bhattacharjee",
 	            role=c("aut", "cre","ctb")),
                person(("Akash"), "Pawar", role=c("aut","ctb")))
 Description: High dimensional survival data analysis with Markov Chain Monte Carlo(MCMC). 
-              Currently support frailty data analysis. Allows for Weibull and 
+              Currently supports frailty data analysis. Allows for Weibull and 
               Exponential distribution. Includes function for interval censored data.
 License: GPL-3
 Encoding: UTF-8
 NeedsCompilation: no
 Maintainer: Atanu Bhattacharjee <atanustat@gmail.com>
-RoxygenNote: 7.1.1.9000
-Packaged: 2021-05-23 14:05:27 UTC; atanu
+RoxygenNote: 7.3.1
+Packaged: 2024-03-27 21:47:34 UTC; Atanu Bhattacharjee
 Author: Atanu Bhattacharjee [aut, cre, ctb],
   Akash Pawar [aut, ctb]
 Repository: CRAN
-Date/Publication: 2021-05-23 14:20:02 UTC
+Date/Publication: 2024-03-28 16:30:05 UTC

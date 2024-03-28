@@ -33,7 +33,7 @@
 #' @import rjags
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ##
 #' data(frailty)
 #' fraidm(m=5,n=7,Ins="institute",Del="del",Time="timevar",T.min="time.min",chn=2,iter=6,data=frailty)

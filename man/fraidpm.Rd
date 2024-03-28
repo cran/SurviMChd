@@ -38,7 +38,7 @@ Frailty analysis on high dimensional data by Drichlet process mixture.
 By given m and n, a total of 3 variables can be selected.
 }
 \examples{
-\dontrun{
+\donttest{
 ##
 data(frailty)
 fraidpm(m=5,n=7,Ins="institute",Del="del",Time="timevar",T.min="time.min",chn=2,iter=6,

@@ -21,7 +21,7 @@
 #'
 #' @author Atanu Bhattacharjee and Akash Pawar
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ##
 #' data(mcsurv)
 #' survMCmulti(var1="x1",var2=NULL,var3="x3",var4="x2",

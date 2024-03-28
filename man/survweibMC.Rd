@@ -28,7 +28,7 @@ beta1[1] Posterior estimates of regression coefficients and deviance
 Survival analysis with weibull distribution by MCMC
 }
 \examples{
-\dontrun{
+\donttest{
 ##
 data(headnneck)
 survweibMC(m1=8,n1=12,m2=4,n2=7,chains=2,iter=10,data=headnneck)

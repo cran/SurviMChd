@@ -23,7 +23,7 @@
 #' @export
 #' @author Atanu Bhattacharjee and Akash Pawar
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ##
 #' data(frailty)
 #' fraidpm(m=5,n=7,Ins="institute",Del="del",Time="timevar",T.min="time.min",chn=2,iter=6,

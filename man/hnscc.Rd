@@ -3,9 +3,7 @@
 \docType{data}
 \name{hnscc}
 \alias{hnscc}
-\title{hnscc
-
-Head and neck cancer data}
+\title{hnscc Head and neck cancer data}
 \format{
 A dataframe with 565 rows and 104 variables
 \describe{

@@ -19,7 +19,7 @@
 #'
 #' @author Atanu Bhattacharjee and Akash Pawar
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ##
 #' data(mcsurv)
 #' survMC(m=4,n=8,Time="OS",Event="Death",chains=2,adapt=100,iter=1000,data=mcsurv)

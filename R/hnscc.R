@@ -1,6 +1,4 @@
-#' @title hnscc
-#'
-#' Head and neck cancer data
+#' @title hnscc Head and neck cancer data
 #'
 #' @description High dimensional head and neck cancer gene expression data
 #' @usage data(hnscc)
